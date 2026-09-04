@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: 302go-data
+spec:
+  # SQLite needs a single writer on a local filesystem, so one RWO volume
+  # and a Recreate deployment strategy. Never put this on NFS.
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi

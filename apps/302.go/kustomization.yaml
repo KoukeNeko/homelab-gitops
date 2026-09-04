@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: 302go
+
+resources:
+  - namespace.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - sealed-secret.yaml
+
+configMapGenerator:
+  - name: 302go-config
+    literals:
+      - BASE_URL=https://s.example.com
+      - EVENT_RETENTION_DAYS=90
+generatorOptions:
+  disableNameSuffixHash: true
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: 302go
+      app.kubernetes.io/part-of: homelab
+
+# The 302.go release workflow rewrites newTag on every tagged release.
+images:
+  - name: ghcr.io/koukeneko/302.go
+    newName: ghcr.io/koukeneko/302.go
+    newTag: v0.1.0

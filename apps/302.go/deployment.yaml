@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 302go
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: 302go
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: 302go
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: 302go
+          image: ghcr.io/koukeneko/302.go
+          args: ["serve"]
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: LISTEN_ADDR
+              value: ":8080"
+            - name: DATA_DIR
+              value: /data
+            - name: LOG_FORMAT
+              value: json
+            # Traefik talks to the pod from the cluster network; trust it so
+            # X-Forwarded-For / X-Forwarded-Proto are honoured. Narrow this to
+            # your pod CIDR (e.g. 10.42.0.0/16 on k3s) if you prefer.
+            - name: TRUSTED_PROXIES
+              value: 10.0.0.0/8
+          envFrom:
+            - configMapRef:
+                name: 302go-config
+            - secretRef:
+                name: 302go-secrets
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: 302go-data

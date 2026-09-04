@@ -1,0 +1,4 @@
+# Plaintext secrets must never land here; seal them with kubeseal first.
+**/secret.yaml
+**/*.plain.yaml
+.DS_Store
