@@ -11,7 +11,8 @@ cd "$(dirname "$0")"
 
 NAMESPACE=302go
 SECRET_NAME=302go-secrets
-IMAGE="$(sed -n 's/^\s*newName:\s*//p' kustomization.yaml):$(sed -n 's/^\s*newTag:\s*//p' kustomization.yaml)"
+# POSIX character class so this works with both BSD (macOS) and GNU sed.
+IMAGE="$(sed -n 's/^[[:space:]]*newName:[[:space:]]*//p' kustomization.yaml):$(sed -n 's/^[[:space:]]*newTag:[[:space:]]*//p' kustomization.yaml)"
 
 read -r -s -p "Admin password: " password; echo
 [[ -n "$password" ]] || { echo "password must not be empty" >&2; exit 1; }
