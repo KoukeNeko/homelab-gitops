@@ -13,7 +13,7 @@ resources:
 configMapGenerator:
   - name: 302go-config
     literals:
-      - BASE_URL=https://s.example.com
+      - BASE_URL=https://302.koukeneko.cafe
       - EVENT_RETENTION_DAYS=90
 generatorOptions:
   disableNameSuffixHash: true

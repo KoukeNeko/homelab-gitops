@@ -3,15 +3,14 @@ kind: Ingress
 metadata:
   name: 302go
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # TLS is terminated at Cloudflare's edge and the tunnel reaches Traefik's
+    # plain-HTTP entrypoint (node :80), so route on `web`, not `websecure`.
+    # No cert-manager here — Cloudflare owns the public certificate.
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   ingressClassName: traefik
-  tls:
-    - hosts: ["s.example.com"]
-      secretName: 302go-tls
   rules:
-    - host: s.example.com
+    - host: 302.koukeneko.cafe
       http:
         paths:
           - path: /
