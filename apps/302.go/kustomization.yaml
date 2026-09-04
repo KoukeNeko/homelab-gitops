@@ -28,4 +28,4 @@ labels:
 images:
   - name: ghcr.io/koukeneko/302.go
     newName: ghcr.io/koukeneko/302.go
-    newTag: v0.2.0
+    newTag: v0.2.1
