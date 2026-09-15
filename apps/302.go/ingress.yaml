@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: 302.koukeneko.cafe
+    - host: 302.doeshing.uk
       http:
         paths:
           - path: /

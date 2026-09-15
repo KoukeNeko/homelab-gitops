@@ -83,4 +83,4 @@ Installed on the cluster outside this repo:
 
 | App | URL | Image |
 |-----|-----|-------|
-| [302.go](apps/302.go/) | https://302.koukeneko.cafe | `ghcr.io/koukeneko/302.go` |
+| [302.go](apps/302.go/) | https://302.doeshing.uk | `ghcr.io/koukeneko/302.go` |
