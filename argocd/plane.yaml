@@ -60,6 +60,10 @@ spec:
       kind: Deployment
       jqPathExpressions:
         - .spec.template.metadata.annotations.timestamp
+    - group: batch
+      kind: Job
+      jqPathExpressions:
+        - .spec.template.metadata.annotations.timestamp
   syncPolicy:
     automated:
       prune: true
