@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: plane
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://helm.plane.so/
+      chart: plane-ce
+      targetRevision: 1.8.1
+      helm:
+        releaseName: plane-app
+        values: |
+          planeVersion: v1.4.1
+
+          ingress:
+            enabled: true
+            appHost: plane.doeshing.uk
+            ingressClass: traefik
+
+          ssl:
+            externalTermination: true
+
+          postgres:
+            local_setup: false
+
+          redis:
+            storageClass: local-path
+            volumeSize: 1Gi
+
+          rabbitmq:
+            storageClass: local-path
+            volumeSize: 1Gi
+
+          minio:
+            storageClass: local-path
+            volumeSize: 5Gi
+
+          external_secrets:
+            app_keys_existingSecret: plane-secrets
+            app_env_existingSecret: plane-secrets
+            live_env_existingSecret: plane-secrets
+            rabbitmq_existingSecret: plane-secrets
+            doc_store_existingSecret: plane-secrets
+
+          env:
+            requireExplicitSecrets: true
+            default_cluster_domain: cluster.local
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: plane
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
