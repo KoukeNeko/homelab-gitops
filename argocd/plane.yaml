@@ -55,6 +55,11 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: plane
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jqPathExpressions:
+        - .spec.template.metadata.annotations.timestamp
   syncPolicy:
     automated:
       prune: true
