@@ -49,6 +49,9 @@ spec:
           env:
             requireExplicitSecrets: true
             default_cluster_domain: cluster.local
+    - repoURL: https://github.com/KoukeNeko/homelab-gitops.git
+      targetRevision: main
+      path: apps/plane
   destination:
     server: https://kubernetes.default.svc
     namespace: plane
