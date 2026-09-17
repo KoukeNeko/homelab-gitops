@@ -1,0 +1,28 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: plane-god-mode-slash
+  namespace: plane
+spec:
+  redirectRegex:
+    regex: '^https?://plane\.doeshing\.uk/god-mode$'
+    replacement: https://plane.doeshing.uk/god-mode/
+    permanent: false
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: plane-god-mode-redirect
+  namespace: plane
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`plane.doeshing.uk`) && Path(`/god-mode`)
+      priority: 100
+      middlewares:
+        - name: plane-god-mode-slash
+      services:
+        - name: plane-app-admin
+          port: 3000
