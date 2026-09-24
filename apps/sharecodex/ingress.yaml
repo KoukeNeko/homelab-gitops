@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sharecodex
+  annotations:
+    # TLS is terminated at Cloudflare's edge and the tunnel reaches Traefik's
+    # plain-HTTP entrypoint (node :80), so route on `web`, not `websecure`.
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: sharecodex.doeshing.uk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sharecodex
+                port:
+                  name: http

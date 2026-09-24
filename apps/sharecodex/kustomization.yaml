@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: sharecodex
+
+resources:
+  - namespace.yaml
+  - postgres.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - sealed-secret.yaml
+
+configMapGenerator:
+  - name: sharecodex-config
+    literals:
+      - PUBLIC_URL=https://sharecodex.doeshing.uk
+      - LISTEN_ADDR=:8080
+generatorOptions:
+  disableNameSuffixHash: true
+
+labels:
+  - includeSelectors: false
+    pairs:
+      app.kubernetes.io/part-of: homelab
+
+# Bump newTag to roll out a ShareCodex release.
+images:
+  - name: ghcr.io/koukeneko/sharecodex-server
+    newName: ghcr.io/koukeneko/sharecodex-server
+    newTag: 0.1.1

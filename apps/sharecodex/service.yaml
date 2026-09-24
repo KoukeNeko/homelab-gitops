@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sharecodex
+spec:
+  selector:
+    app.kubernetes.io/name: sharecodex
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
