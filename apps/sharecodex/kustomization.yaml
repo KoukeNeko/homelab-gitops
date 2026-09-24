@@ -27,4 +27,4 @@ labels:
 images:
   - name: ghcr.io/koukeneko/sharecodex-server
     newName: ghcr.io/koukeneko/sharecodex-server
-    newTag: 0.1.6
+    newTag: 0.1.7
