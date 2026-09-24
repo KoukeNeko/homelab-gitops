@@ -17,5 +17,6 @@ is at `/admin/`.
 
 ## Releases
 
-Set `images[].newTag` in `kustomization.yaml` to the new ShareCodex version and push. Argo CD rolls
-it out; the server runs its own database migrations on start.
+Tagging `vX.Y.Z` in the ShareCodex repo builds the image and commits a bump of `images[].newTag` in
+`kustomization.yaml` here (needs the `GITOPS_TOKEN` secret there). Argo CD rolls it out; the server
+runs its own database migrations on start. To roll out by hand, set `newTag` and push.
